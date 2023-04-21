@@ -5,13 +5,25 @@ on:
     branches:
       - issue-1
 
+env:
+  TF_WORKSPACES_MAPPING: '{ main: "prod", issue-1: "stg" }'
+
+
+github.ref_name:
+
+
 jobs:
 
   build:
     name: Build Images and Deploy
     runs-on: ubuntu-latest
-
+    env:
+      AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
+      AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
     steps:
+
+      - name: Print tf_workspace
+        run: echo "${{ fromJson(TF_WORKSPACES_MAPPING)[github.ref_name] }}"
 
       - name: Check out code
         uses: actions/checkout@v3
@@ -22,7 +34,9 @@ jobs:
 #          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
 #          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
 
-      - name: terraform apply
-        uses: aklyukin/tf-gha/terraform-plan@main
-        with:
-          path: project
+#      - name: terraform apply
+#        uses: aklyukin/tf-gha/terraform-plan@main
+#        with:
+#          path: project
+#          tf_workspace: ${{ tf_workspace }}
+#          varsfile: ${{ tf_workspace }}.tfvars
