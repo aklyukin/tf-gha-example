@@ -7,6 +7,9 @@ on:
 
 env:
   TF_WORKSPACES_MAPPING: '{ "main": "prod", "issue-1": "stg" }'
+  TF_WORKSPACE: ${{ fromJson(env.TF_WORKSPACES_MAPPING)[github.ref_name] }}
+
+
 
 jobs:
 
@@ -18,8 +21,11 @@ jobs:
       AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
     steps:
 
+#      - name: Print tf_workspace
+#        run: echo "${{ fromJson(env.TF_WORKSPACES_MAPPING)[github.ref_name] }}"
+
       - name: Print tf_workspace
-        run: echo "${{ fromJson(env.TF_WORKSPACES_MAPPING)[github.ref_name] }}"
+        run: echo "${{ env.TF_WORKSPACE }}"
 
       - name: Check out code
         uses: actions/checkout@v3
