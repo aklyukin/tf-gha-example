@@ -6,7 +6,7 @@ on:
       - issue-1
 
 env:
-  TF_WORKSPACES_MAPPING: '{ "main": "prod", "issue-1": "stg" }'
+  TF_WORKSPACES_MAPPING: '{ "main": "prod", "issue-1": "prod" }'
 
 jobs:
 
