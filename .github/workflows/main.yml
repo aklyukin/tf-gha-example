@@ -7,9 +7,7 @@ on:
 
 env:
   TF_WORKSPACES_MAPPING: '{ "main": "prod", "issue-1": "stg" }'
-  TF_WORKSPACE: ${{ fromJson(env.TF_WORKSPACES_MAPPING)[github.ref_name] }}
-
-
+  TF_WORKSPACE: "${{ fromJson(env.TF_WORKSPACES_MAPPING)[github.ref_name] }}"
 
 jobs:
 
