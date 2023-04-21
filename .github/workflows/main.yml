@@ -19,7 +19,7 @@ jobs:
     steps:
 
       - name: Print tf_workspace
-        run: echo "${{ fromJson(TF_WORKSPACES_MAPPING)[github.ref_name] }}"
+        run: echo "${{ fromJson(env.TF_WORKSPACES_MAPPING)[github.ref_name] }}"
 
       - name: Check out code
         uses: actions/checkout@v3
