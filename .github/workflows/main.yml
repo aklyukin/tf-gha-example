@@ -18,11 +18,8 @@ jobs:
       AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
     steps:
 
-      - name: Print tf_workspace
-        run: echo "TF_WORKSPACE=${{ fromJson(env.TF_WORKSPACES_MAPPING)[github.ref_name] }}" >> $GITHUB_ENV
-
-      - name: Print tf_workspace
-        run: echo "${{ env.TF_WORKSPACE }}"
+      - name: Add TF_WORKSPACE to env
+        run: echo "WORKSPACE=${{ fromJson(env.TF_WORKSPACES_MAPPING)[github.ref_name] }}" >> $GITHUB_ENV
 
       - name: Check out code
         uses: actions/checkout@v3
@@ -33,9 +30,9 @@ jobs:
 #          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
 #          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
 
-#      - name: terraform apply
-#        uses: aklyukin/tf-gha/terraform-plan@main
-#        with:
-#          path: project
-#          tf_workspace: ${{ tf_workspace }}
-#          varsfile: ${{ tf_workspace }}.tfvars
+      - name: terraform apply
+        uses: aklyukin/tf-gha/terraform-plan@main
+        with:
+          path: project
+          workspace: ${{ env.WORKSPACE }}
+          var_files: ${{ tf_workspace }}.tfvars
