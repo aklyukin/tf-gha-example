@@ -8,10 +8,6 @@ on:
 env:
   TF_WORKSPACES_MAPPING: '{ main: "prod", issue-1: "stg" }'
 
-
-github.ref_name:
-
-
 jobs:
 
   build:
