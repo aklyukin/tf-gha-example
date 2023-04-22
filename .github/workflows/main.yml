@@ -47,7 +47,7 @@ jobs:
         uses: actions/cache@v3
         with:
           path: ${{ env.CACHE_DIRECTORY }}
-          key: ${{ runner.os }}-terraform-${{ hashFiles('**/versions.tf') }}
+          key: ${{ runner.os }}-terraform-${{ hashFiles('**/.terraform.lock.hcl') }}
           restore-keys: ${{ runner.os }}-terraform-
 
       - name: Terraform plan
