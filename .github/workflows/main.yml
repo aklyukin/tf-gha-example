@@ -25,6 +25,7 @@ jobs:
           path: project
 
   tf-plan:
+    needs: tf-fmt
     name: Terraform plan
     runs-on: ubuntu-latest
 
