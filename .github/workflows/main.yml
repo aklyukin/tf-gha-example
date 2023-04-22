@@ -41,13 +41,13 @@ jobs:
 #          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
 #          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
       - name: Create terraform plugin cache directory
-        run: mkdir --parents ~/${{ env.CACHE_DIRECTORY }}
+        run: mkdir --parents ${{ env.CACHE_DIRECTORY }}
 
       - name: Cache terraform plugin cache directory
         uses: actions/cache@v3
         with:
           path: ${{ env.CACHE_DIRECTORY }}
-          key: ${{ runner.os }}-tf-plugin-cache
+          key: ${{ runner.os }}-tf-plugin-cache-new
 
       - name: Terraform plan
         uses: aklyukin/tf-gha/terraform-plan@main
