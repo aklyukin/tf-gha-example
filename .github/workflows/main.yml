@@ -7,30 +7,38 @@ on:
 
 env:
   TF_WORKSPACES_MAPPING: '{ "main": "prod", "issue-1": "prod" }'
+  AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
+  AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
 
 jobs:
 
-  build:
-    name: Build Images and Deploy
+  tf-fmt:
+    name: Terraform fmt
     runs-on: ubuntu-latest
-    env:
-      AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
-      AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+
     steps:
-
-      - name: Add TF_WORKSPACE to env
-        run: echo "WORKSPACE=${{ fromJson(env.TF_WORKSPACES_MAPPING)[github.ref_name] }}" >> $GITHUB_ENV
-
       - name: Check out code
         uses: actions/checkout@v3
+      - name: Terraform fmt
+        uses: aklyukin/tf-gha/terraform-fmt@main
+        with:
+          path: project
 
+  tf-plan:
+    name: Terraform plan
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Add TF_WORKSPACE to env
+        run: echo "WORKSPACE=${{ fromJson(env.TF_WORKSPACES_MAPPING)[github.ref_name] }}" >> $GITHUB_ENV
+      - name: Check out code
+        uses: actions/checkout@v3
 #      - name: Configure AWS Credentials
 #        uses: aws-actions/configure-aws-credentials@v2
 #        with:
 #          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
 #          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-
-      - name: terraform apply
+      - name: Terraform plan
         uses: aklyukin/tf-gha/terraform-plan@main
         with:
           path: project
