@@ -54,5 +54,5 @@ jobs:
         with:
           path: project
           workspace: ${{ env.WORKSPACE }}
-          plugin_cache_dir: ${{ env.HOME }}/.terraform.d/plugin-cache
+          plugin_cache_dir: /github/workspace/${{ env.CACHE_DIRECTORY }}
           var_files: ${{ env.WORKSPACE }}.tfvars
