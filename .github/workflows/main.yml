@@ -47,7 +47,8 @@ jobs:
         uses: actions/cache@v3
         with:
           path: ${{ env.CACHE_DIRECTORY }}
-          key: ${{ runner.os }}-tf-plugin-cache-new
+          key: ${{ runner.os }}-terraform-${{ hashFiles('**/versions.tf') }}
+          restore-keys: ${{ runner.os }}-terraform-
 
       - name: Terraform plan
         uses: aklyukin/tf-gha/terraform-plan@main
