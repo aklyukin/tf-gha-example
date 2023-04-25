@@ -1,0 +1,63 @@
+name: Generate terraform plan
+
+on:
+  pull_request:
+    branches:
+      - main
+      - stg
+      - issue-1
+    paths:
+      - project/**
+
+permissions:
+  contents: read
+  pull-requests: write
+
+env:
+  TF_WORKSPACES_MAPPING: '{ "main": "prod", "stg": "stg", "issue-1": "prod" }'
+  CACHE_DIRECTORY: .terraform.d/plugin-cache
+  AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
+  AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+
+jobs:
+
+  tf-fmt:
+    name: Terraform fmt
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Check out code
+        uses: actions/checkout@v3
+      - name: Terraform fmt
+        uses: aklyukin/tf-gha/terraform-fmt@main
+        with:
+          path: project
+
+  tf-plan:
+    needs: tf-fmt
+    name: Terraform plan
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Add TF_WORKSPACE to env
+        run: echo "WORKSPACE=${{ fromJson(env.TF_WORKSPACES_MAPPING)[github.ref_name] }}" >> $GITHUB_ENV
+      - name: Check out code
+        uses: actions/checkout@v3
+
+      - name: Create terraform plugin cache directory
+        run: mkdir --parents ${{ env.CACHE_DIRECTORY }}
+
+      - name: Cache terraform plugin cache directory
+        uses: actions/cache@v3
+        with:
+          path: ${{ env.CACHE_DIRECTORY }}
+          key: ${{ runner.os }}-terraform-${{ hashFiles('**/.terraform.lock.hcl') }}
+          restore-keys: ${{ runner.os }}-terraform-
+
+      - name: Terraform plan
+        uses: aklyukin/tf-gha/terraform-plan@main
+        with:
+          path: project
+          workspace: ${{ env.WORKSPACE }}
+          plugin_cache_dir: /github/workspace/${{ env.CACHE_DIRECTORY }}
+          var_files: ${{ env.WORKSPACE }}.tfvars
