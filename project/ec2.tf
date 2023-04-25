@@ -18,8 +18,8 @@ module "super_host_label" {
 #############################################################
 
 module "aws_key_pair" {
-  source              = "cloudposse/key-pair/aws"
-  version             = "0.18.3"
+  source  = "cloudposse/key-pair/aws"
+  version = "0.18.3"
   context = module.super_host_label.context
 
   ssh_public_key_path = var.ssh_public_key_path
@@ -48,10 +48,10 @@ module "subnets" {
 }
 
 module "ec2_server" {
-  source = "git::https://github.com/cloudposse/terraform-aws-ec2-instance.git?ref=tags/0.47.1"
+  source  = "git::https://github.com/cloudposse/terraform-aws-ec2-instance.git?ref=tags/0.47.1"
   context = module.super_host_label.context
 
-  instance_type               = var.ec2_instance_type
-  vpc_id                      = module.vpc.vpc_id
-  subnet                      = module.subnets.public_subnet_ids[0]
+  instance_type = var.ec2_instance_type
+  vpc_id        = module.vpc.vpc_id
+  subnet        = module.subnets.public_subnet_ids[0]
 }
