@@ -49,6 +49,7 @@ variable "ec2_instance_type" {
 
 variable "ssh_public_key_path" {
   type        = string
+  default     = "/secrets"
   description = "Path to SSH public key directory (e.g. `/secrets`)"
 }
 
