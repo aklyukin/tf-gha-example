@@ -38,3 +38,22 @@ variable "tags" {
   default     = {}
   description = "Additional tags (e.g. `{ BusinessUnit = \"XYZ\" }`"
 }
+
+#############################################################
+
+variable "ec2_instance_type" {
+  type        = string
+  default     = "t2.nano"
+  description = "EC2 instance type"
+}
+
+variable "ssh_public_key_path" {
+  type        = string
+  default     = "/secrets"
+  description = "Path to SSH public key directory (e.g. `/secrets`)"
+}
+
+variable "availability_zones" {
+  type        = list(string)
+  description = "List of Availability Zones where subnets will be created"
+}

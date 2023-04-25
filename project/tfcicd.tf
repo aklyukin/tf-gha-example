@@ -3,6 +3,8 @@
 #############################################################
 
 module "tf_cicd_user" {
+  enabled = (terraform.workspace == "prod") ? true : false
+
   source    = "git::https://github.com/cloudposse/terraform-aws-iam-system-user.git?ref=tags/1.1.0"
   delimiter = var.delimiter
   name      = var.name
