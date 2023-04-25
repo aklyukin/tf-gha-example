@@ -43,7 +43,7 @@ jobs:
         run: echo "${{ github.ref_name }}"
 
       - name: pull request ref name
-        run: echo "${{ github.event.pull_request.base.ref_name }}"
+        run: echo "${{ github.event.pull_request.base.ref }}"
 
       - name: Add TF_WORKSPACE to env
         run: echo "WORKSPACE=${{ fromJson(env.TF_WORKSPACES_MAPPING)[github.ref_name] }}" >> $GITHUB_ENV
