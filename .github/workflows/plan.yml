@@ -5,7 +5,7 @@ on:
     branches:
       - main
       - stg
-      - issue-1
+      - issue-2
     paths:
       - project/**
 
